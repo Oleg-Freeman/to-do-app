@@ -5,25 +5,20 @@ const { ensureAuthenticated, bodyValidation } = require('../middlewares/validati
 // const { json } = require('body-parser');
 
 // Get all Tasks from user
-router.route('/').get(ensureAuthenticated, (req, res) => {
-  let allTasks = [];
-  Task.find({ userId: req.user._id, completed: false })
-    .sort({ createdAt: -1 })
-    .then(tasks1 => {
-      allTasks = [...tasks1];
-      return Task.find({ userId: req.user._id, completed: true })
-        .sort({ createdAt: -1 })
-        .then(tasks2 => {
-          allTasks = [...allTasks, ...tasks2];
-        });
-    })
-    .then(() => {
-      res.status(200).json(allTasks);
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(400).json('Error: ' + err);
-    });
+router.route('/').get(ensureAuthenticated, async(req, res) => {
+  try {
+    let allTasks = [];
+    const tasks1 = await Task.find({ userId: req.user._id, completed: false })
+      .sort({ createdAt: -1 });
+    const tasks2 = await Task.find({ userId: req.user._id, completed: true })
+      .sort({ createdAt: -1 });
+    allTasks = [...tasks1, ...tasks2];
+    res.status(200).json(allTasks);
+  }
+  catch (err) {
+    console.log(err);
+    res.status(400).json('Error: ' + err);
+  }
 });
 
 // Add new Task

@@ -5,7 +5,7 @@ details:
 - show to user only its own items (authorization), except admin,which can manage all items
 - types of user: admin / user
 - store server items in-memory
-- authorization by username/password
+- authorization by username/password // DONE
 
 client:
 >used to connect to server and manage list-items (CRUD)

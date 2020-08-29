@@ -18,22 +18,13 @@ require('dotenv').config({ path: './config/.env' });
 // Get all users from DB
 router.route('/').get(async(req, res) => {
   try {
-    await User.find()
+    const users = await User.find()
       .select('-password -__v')
-      .sort({ createdAt: -1 })
-      // .populate({
-      //   path: 'tasks'
-      // })
-      .exec((err, users) => {
-        if (err) {
-          res.status(400).json('Error: ' + err);
-          return err;
-        }
-        else if (users === null || users.length === 0) {
-          res.status(400).json('No any registered users found');
-        }
-        else res.json(users);
-      });
+      .sort({ createdAt: -1 });
+    if (users === null || users.length === 0) {
+      res.status(400).json('No any registered users found');
+    }
+    else res.json(users);
   }
   catch (err) {
     console.log(err);
@@ -77,22 +68,21 @@ router.route('/register').post(isloggedIn, async(req, res) => {
     return;
   }
 
-  // Check if User Exists in DB
-  const emailExist = await User.findOne({ email: req.body.email });
-  if (emailExist) {
-    res.status(400).json({ message: 'Email is already exists' });
-    return;
-  }
-
-  const newUser = new User({ email, password, userName });
-
-  // Hash password
-  const salt = await bcrypt.genSalt(10);
-  newUser.password = await bcrypt.hash(req.body.password, salt);
-
   try {
-    await newUser.save();
-    res.json(newUser);
+    // Check if User Exists in DB
+    const emailExist = await User.findOne({ email: req.body.email });
+    if (emailExist) {
+      res.status(400).json({ message: 'Email is already exists' });
+      return;
+    }
+
+    const newUser = new User({ email, password, userName });
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    newUser.password = await bcrypt.hash(req.body.password, salt);
+
+    await newUser.save(() => res.status(200).json(newUser));
   }
   catch (err) {
     res.status(400).json('Error: ' + err);
@@ -116,12 +106,7 @@ router.route('/login').post(isloggedIn, async(req, res) => {
     });
   }
   try {
-    const user = await User.findOne({ email: req.body.email }, err => {
-      if (err) {
-        res.status(400).json('Error: ' + err);
-        return err;
-      }
-    });
+    const user = await User.findOne({ email: req.body.email });
     if (user === null || user.length === 0) {
       res.status(400).json('Wrong credentials, try again');
       return;
@@ -161,10 +146,6 @@ router.route('/login').post(isloggedIn, async(req, res) => {
           res.status(400).json('Wrong credentials, try again...');
         }
       });
-      // res.json({
-      //   userId: user._id,
-      //   token: 'will execute?'
-      // });
     }
   }
   catch (err) {
@@ -176,12 +157,7 @@ router.route('/login').post(isloggedIn, async(req, res) => {
 // Logout
 router.route('/logout/:id').get(async(req, res) => {
   try {
-    const user = await User.findById(req.params.id, err => {
-      if (err) {
-        res.status(400).json('Error: ' + err);
-        return err;
-      }
-    });
+    const user = await User.findById(req.params.id);
     if (user === null || user.length === 0) {
       res.status(400).json('User not found');
       return;
@@ -206,27 +182,11 @@ router.route('/logout/:id').get(async(req, res) => {
 // Get one user by ID
 router.route('/:id').get(async(req, res) => {
   try {
-    const user = await User.findById(req.params.id, err => {
-      if (err) {
-        res.status(400).json('Error: ' + err);
-        return err;
-      }
-    }).select('-password -__v');
-    // .populate({
-    //   path: 'tasks'
-    // })
+    const user = await User.findById(req.params.id).select('-password -__v');
     if (user === null) {
       res.status(400).json('Error: user not found');
     }
     else {
-      // const taskCount = await Task.countDocuments({ userId: req.params.id }, (err, count) => {
-      //   if (err) {
-      //     res.status(400).json('Error: ' + err);
-      //     return err;
-      //   }
-      // });
-      // console.log(taskCount);
-      // user.taskCount = taskCount;
       res.json(user);
     }
   }
@@ -239,15 +199,14 @@ router.route('/:id').get(async(req, res) => {
 // Delete user
 router.route('/:id').delete(ensureAuthenticated, async(req, res) => {
   try {
-    await User.findByIdAndDelete(req.params.id)
-      .exec((err, user) => {
-        if (err) {
-          res.status(400).json('Error: ' + err);
-          return err;
-        }
-        else if (user === null) res.status(400).json('Error: user not found');
-        else res.json('User deleted');
-      });
+    await User.findByIdAndDelete(req.params.id, (err, user) => {
+      if (err) {
+        res.status(400).json('Error: ' + err);
+        return err;
+      }
+      else if (user === null) res.status(400).json('Error: user not found');
+      else res.json('User deleted');
+    });
   }
   catch (err) {
     console.log(err);

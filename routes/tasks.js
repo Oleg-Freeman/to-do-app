@@ -77,12 +77,7 @@ router.route('/:id').delete(ensureAuthenticated, async(req, res) => {
 // Update Task
 router.route('/update/:id').post(ensureAuthenticated, async(req, res) => {
   try {
-    const task = await Task.findById(req.params.id, err => {
-      if (err) {
-        res.status(400).json('Error: ' + err);
-        return err;
-      }
-    });
+    const task = await Task.findById(req.params.id);
     if (task === null) {
       res.status(400).json('Task not found');
       return;
@@ -114,12 +109,7 @@ router.route('/update/:id').post(ensureAuthenticated, async(req, res) => {
 // Mark as complete
 router.route('/complete/:id').get(ensureAuthenticated, async(req, res) => {
   try {
-    const task = await Task.findById(req.params.id, err => {
-      if (err) {
-        res.status(400).json('Error: ' + err);
-        return err;
-      }
-    });
+    const task = await Task.findById(req.params.id);
     if (task === null) {
       res.status(400).json('Task not found');
       return;

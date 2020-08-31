@@ -16,7 +16,7 @@ exports.getAllUsers = async(req, res) => {
     const users = await User.find()
       .select('-password -__v')
       .sort({ createdAt: -1 });
-    if (users === null || users.length === 0) {
+    if (!users || users.length === 0) {
       res.status(400).json('No any registered users found');
     }
     else res.json(users);
@@ -153,7 +153,7 @@ exports.userLogIn = async(req, res) => {
 exports.userlogOut = async(req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    if (user === null || user.length === 0) {
+    if (!user) {
       res.status(400).json('User not found');
       return;
     }
@@ -178,7 +178,7 @@ exports.userlogOut = async(req, res) => {
 exports.getOneUser = async(req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-password -__v');
-    if (user === null) {
+    if (!user) {
       res.status(400).json('Error: user not found');
     }
     else {
@@ -199,7 +199,7 @@ exports.deleteuser = async(req, res) => {
         res.status(400).json('Error: ' + err);
         return err;
       }
-      else if (user === null) res.status(400).json('Error: user not found');
+      else if (!user) res.status(400).json('Error: user not found');
       else res.json('User deleted');
     });
   }

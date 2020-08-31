@@ -27,34 +27,31 @@ module.exports = {
 
   ensureAuthenticated: async(req, res, next) => {
     if (!req.headers.token) {
-      console.log('Please log in to view that resource');
-      return res.status(401).json('Please log in to view that resource');
+      res.status(401).json('Please log in to view that resource');
     }
     else {
       try {
         const decoded = jwt.verify(req.headers.token, process.env.JWT_SECRET);
 
-        await User.findById(decoded.userId)
-          .exec((err, user) => {
-            if (err) {
-              res.status(401).json('Error: ' + err);
-              return err;
-            }
-            else if (user === null || user.length === 0) {
-              return res.status(401).json('User not found');
-            }
-            else if (!user.isAuthenticated) {
-              console.log('Please log in to view that resource');
-              return res.status(401).json('Please log in to view that resource');
-            }
-            else {
-              req.user = user;
-              next();
-            }
-          });
+        const user = await User.findById(decoded.userId);
+        if (!user) {
+          res.status(401).json('User not found');
+          return;
+        }
+        else if (!user.isAuthenticated) {
+          res.status(401).json('Please log in to view that resource');
+          return;
+        }
+        else {
+          req.user = user;
+          next();
+        }
       }
       catch (e) {
-        if (e) return res.status(401).json('Auth error: ' + e);
+        if (e) {
+          console.log(e);
+          res.status(401).json('Auth error: ' + e);
+        }
       }
     }
   },
@@ -65,20 +62,21 @@ module.exports = {
         // const token = req.headers.token.split(' ')[1];
         const decoded = jwt.verify(req.headers.token, process.env.JWT_SECRET);
 
-        await User.findById(decoded.userId)
-          .exec((err, user) => {
-            if (err) return res.status(400).json('Error: ' + err);
-            if (user.isAuthenticated) {
-              console.log('User already logged in');
-              return res.json({ authenticated: true });
-            }
-            else {
-              next();
-            }
-          });
+        const user = await User.findById(decoded.userId);
+        if (user.isAuthenticated) {
+          console.log('User already logged in');
+          res.json({ authenticated: true });
+          return;
+        }
+        else {
+          next();
+        }
       }
       catch (e) {
-        if (e) return res.status(400).json('Error: ' + e);
+        if (e) {
+          console.log('Error: ' + e);
+          res.status(400).json('Error: ' + e);
+        }
       }
     }
     else {
@@ -90,7 +88,7 @@ module.exports = {
     console.log(req.session.user);
     if (!req.session.user) {
       console.log('User not logged in');
-      return res.json({ notAuthenticated: true });
+      res.json({ notAuthenticated: true });
     }
     else {
       next();

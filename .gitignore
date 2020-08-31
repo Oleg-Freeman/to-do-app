@@ -17,6 +17,8 @@
 # misc
 /config/.env
 /config/default.json
+/data/tasks.json
+/data/users.json
 .DS_Store
 .env
 .env.local

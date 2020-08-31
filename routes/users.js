@@ -1,5 +1,21 @@
 const router = require('express').Router();
 
+let validationPathName = '';
+let pathName = '';
+switch (process.env.STORE_LOCALLY) {
+  case 'false':
+    pathName = '../controllers/user.controller.js';
+    validationPathName = '../middlewares/validation.js';
+    break;
+  case 'true':
+    validationPathName = '../middlewares/validation-local.js';
+    pathName = '../controllers/user-local.controller.js';
+    break;
+  default:
+    validationPathName = '../middlewares/validation.js';
+    pathName = '../controllers/user.controller.js';
+}
+
 // User controllers
 const {
   getAllUsers,
@@ -8,13 +24,13 @@ const {
   userlogOut,
   getOneUser,
   deleteuser
-} = require('../controllers/user.controller');
+} = require(pathName);
 
 // Validations
 const {
   ensureAuthenticated,
   isloggedIn
-} = require('../middlewares/validation');
+} = require(validationPathName);
 
 // Get all users from DB
 router.route('/').get(getAllUsers);

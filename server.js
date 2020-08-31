@@ -12,7 +12,15 @@ require('dotenv').config({ path: './config/.env' });
 const port = process.env.PORT || 5000;
 
 // Connect DB
-connectDb();
+switch (process.env.STORE_LOCALLY) {
+  case 'false':
+    connectDb();
+    break;
+  case 'true':
+    break;
+  default:
+    connectDb();
+}
 
 // Middlewares
 app.use(cors());
@@ -23,14 +31,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 // Routes
-if (process.env.STORE_LOCALLY === 'false') {
-  app.use('/users', require('./routes/users'));
-  app.use('/tasks', require('./routes/tasks'));
-}
-if (process.env.STORE_LOCALLY === 'true') {
-  // app.use('/users', require('./routes/users'));
-  // app.use('/posts', require('./routes/posts'));
-}
+
+app.use('/users', require('./routes/users'));
+app.use('/tasks', require('./routes/tasks'));
 
 // app.get('/*', (req, res) => {
 //   res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));

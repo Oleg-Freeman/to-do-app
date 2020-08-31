@@ -58,7 +58,7 @@ exports.deleteOnetask = async(req, res) => {
         res.status(400).json('Error: ' + err);
         return err;
       }
-      else if (task === null) res.status(400).json('Task not found');
+      else if (!task) res.status(400).json('Task not found');
       else if (task.userId !== req.user._id.toString()) {
         res.status(401).json('Unauthorized, trying to reach private data...');
       }
@@ -77,7 +77,7 @@ exports.deleteOnetask = async(req, res) => {
 exports.updateTask = async(req, res) => {
   try {
     const task = await Task.findById(req.params.id);
-    if (task === null) {
+    if (!task) {
       res.status(400).json('Task not found');
       return;
     }
@@ -109,7 +109,7 @@ exports.updateTask = async(req, res) => {
 exports.markAsCompleted = async(req, res) => {
   try {
     const task = await Task.findById(req.params.id);
-    if (task === null) {
+    if (!task) {
       res.status(400).json('Task not found');
       return;
     }

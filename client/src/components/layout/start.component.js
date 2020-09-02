@@ -10,7 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
 const styles = (theme) => ({
-  // ...theme
   buttons: {
     textAlign: 'center',
     '& a': {
@@ -22,7 +21,7 @@ const styles = (theme) => ({
 class Start extends Component {
 
   render() {
-    const {      classes, loading    } = this.props;
+    const { classes, loading } = this.props;
 
     const profileMarkup = !loading ? (
       <Paper className={classes.paper}>

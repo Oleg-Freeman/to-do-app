@@ -10,23 +10,6 @@ const {
   loginValidation
 } = require('../middlewares/validation');
 
-// Get all users from DB
-exports.getAllUsers = async(req, res) => {
-  try {
-    const users = await User.find()
-      .select('-password -__v')
-      .sort({ createdAt: -1 });
-    if (!users || users.length === 0) {
-      res.status(400).json('No any registered users found');
-    }
-    else res.json(users);
-  }
-  catch (err) {
-    console.log(err);
-    res.status(400).json('Error: ' + err);
-  }
-};
-
 // Register new user
 exports.registerNewUser = async(req, res) => {
   const { email, password, userName } = req.body;
@@ -161,23 +144,6 @@ exports.userlogOut = async(req, res) => {
       await user.save(() => {
         res.json({ loggedOut: true });
       });
-    }
-  }
-  catch (err) {
-    console.log(err);
-    res.status(400).json('Error: ' + err);
-  }
-};
-
-// Get one user by ID
-exports.getOneUser = async(req, res) => {
-  try {
-    const user = await User.findById(req.params.id).select('-password -__v');
-    if (!user) {
-      res.status(400).json('Error: user not found');
-    }
-    else {
-      res.json(user);
     }
   }
   catch (err) {

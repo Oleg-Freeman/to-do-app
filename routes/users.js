@@ -18,11 +18,9 @@ switch (process.env.STORE_LOCALLY) {
 
 // User controllers
 const {
-  getAllUsers,
   registerNewUser,
   userLogIn,
   userlogOut,
-  getOneUser,
   deleteuser
 } = require(pathName);
 
@@ -31,9 +29,7 @@ const {
   ensureAuthenticated,
   isloggedIn
 } = require(validationPathName);
-
-// Get all users from DB
-router.route('/').get(getAllUsers);
+const { isAdmin } = require('../middlewares/validation.js');
 
 // Register new user
 router.route('/register').post(isloggedIn, registerNewUser);
@@ -44,10 +40,7 @@ router.route('/login').post(isloggedIn, userLogIn);
 // Logout
 router.route('/logout/:id').get(userlogOut);
 
-// Get one user by ID
-router.route('/:id').get(getOneUser);
-
 // Delete user
-router.route('/:id').delete(ensureAuthenticated, deleteuser);
+router.route('/:id').delete(ensureAuthenticated, isAdmin, deleteuser);
 
 module.exports = router;

@@ -17,7 +17,6 @@ import { connect } from 'react-redux';
 import { addTask, clearErrors } from '../../redux/actions/dataActions';
 
 const styles = (theme) => ({
-  // ...theme,
   submitButton: {
     position: 'relative',
     float: 'right',

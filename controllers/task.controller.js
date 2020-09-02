@@ -90,26 +90,6 @@ exports.deleteOnetask = async(req, res) => {
   }
 };
 
-// Admin - Delete any Task
-exports.adminDeleteAnytask = async(req, res) => {
-  try {
-    await Task.findByIdAndDelete(req.params.id, (err, task) => {
-      if (err) {
-        res.status(400).json('Error: ' + err);
-        return err;
-      }
-      else if (!task) res.status(400).json('Task not found');
-      else {
-        res.json('Task deleted');
-      }
-    });
-  }
-  catch (err) {
-    console.log(err);
-    res.status(400).json('Error: ' + err);
-  }
-};
-
 // Update Task
 exports.updateTask = async(req, res) => {
   try {

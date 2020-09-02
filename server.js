@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const connectDb = require('./db');
-// const path = require('path');
+const path = require('path');
 
 // .env config
 require('dotenv').config({ path: './config/.env' });
@@ -28,16 +28,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Static folder for front end
-// app.use(express.static(path.join(__dirname, 'client', 'build')));
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 // Routes
-
 app.use('/users', require('./routes/users'));
 app.use('/tasks', require('./routes/tasks'));
 
-// app.get('/*', (req, res) => {
-//   res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-// });
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
 
 app.use((err, req, res, next) => {
   if (err) {

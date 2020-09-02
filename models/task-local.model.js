@@ -1,4 +1,3 @@
-/* eslint-disable standard/no-callback-literal */
 const fs = require('fs');
 const path = require('path');
 const p = path.join(path.dirname(process.mainModule.filename), 'data', 'tasks.json');
@@ -6,7 +5,6 @@ const p = path.join(path.dirname(process.mainModule.filename), 'data', 'tasks.js
 const getTasksFromFile = (cb) => {
   fs.readFile(p, (err, content) => {
     if (err) {
-      // console.log('Read file err : ' + err);
       return cb([]);
     }
     else {

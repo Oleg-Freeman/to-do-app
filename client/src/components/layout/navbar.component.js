@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MyButton from '../../util/MyButton';
-import NewTask from '../task/AddTask';
-import LogOutButton from '../user/logOutButton'
+import NewTask from '../task/addTask.component';
+import LogOutButton from '../layout/logOutButton.component'
 
 // Redux Stuff
 import { connect } from 'react-redux';

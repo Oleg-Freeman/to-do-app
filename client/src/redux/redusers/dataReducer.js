@@ -1,5 +1,4 @@
 import {
-  SET_TASK,
   LOADING_DATA,
   ADD_TASK,
   EDIT_TASK,
@@ -28,11 +27,6 @@ export default function(state = initialState, action) {
         loading: false
       };
     }
-    case SET_TASK:
-      return {
-        ...state,
-        task: action.payload
-      };
     case DELETE_TASK: {
       const index = state.tasks.findIndex(
         (task) => task._id === action.payload

@@ -92,8 +92,7 @@ class Login extends Component {
   render() {
     const { classes, UI: { loading } } = this.props;
     const { errors } = this.state;
-    // const isAuthenticated = window.localStorage.getItem('isAuthenticated');
-    // if (isAuthenticated) return <Redirect to='/'/>;
+    
     return (
       <Grid container className={classes.form}>
         <Grid item sm />

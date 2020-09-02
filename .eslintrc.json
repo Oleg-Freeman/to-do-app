@@ -24,6 +24,7 @@
         "linebreak-style": ["error", "windows"],
         "no-param-reassign": ["error", { "props": false }],
         "prefer-destructuring": ["error", {"object": false, "array": false}],
-        "brace-style": ["error", "stroustrup"]
+        "brace-style": ["error", "stroustrup"],
+        "standard/no-callback-literal": "off"
     }
 }

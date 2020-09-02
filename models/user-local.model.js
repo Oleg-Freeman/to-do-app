@@ -1,4 +1,3 @@
-/* eslint-disable standard/no-callback-literal */
 const fs = require('fs');
 const path = require('path');
 const p = path.join(path.dirname(process.mainModule.filename), 'data', 'users.json');

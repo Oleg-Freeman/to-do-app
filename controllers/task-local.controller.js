@@ -110,18 +110,6 @@ exports.deleteOnetask = (req, res) => {
   }
 };
 
-// Admin - Delete any Task
-exports.adminDeleteAnytask = (req, res) => {
-  try {
-    Task.delete(req.params.id);
-    res.json('Task deleted');
-  }
-  catch (err) {
-    console.log(err);
-    res.status(400).json('Error: ' + err);
-  }
-};
-
 // Update Task
 exports.updateTask = (req, res) => {
   try {

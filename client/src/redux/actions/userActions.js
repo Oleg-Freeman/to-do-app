@@ -1,10 +1,8 @@
 import {
   SET_USER,
-  SET_USERS,
   SET_ERRORS,
   CLEAR_ERRORS,
-  LOADING_UI,
-  LOADING_USER
+  LOADING_UI
 } from '../types';
 import axios from 'axios';
 const baseURL = '/';
@@ -15,7 +13,6 @@ export const loginUser = (userData, history) => (dispatch) => {
     .then(res => {
       if (res.data.authenticated) {
         dispatch({ type: CLEAR_ERRORS });
-        // dispatch({ type: SET_AUTHENTICATED });
         history.push('/');
         window.location.reload();
       }
@@ -24,7 +21,6 @@ export const loginUser = (userData, history) => (dispatch) => {
         window.localStorage.setItem('token', JSON.stringify(res.data.token)); // JSON.stringify(res.data._id)
         window.localStorage.setItem('currentUserId', JSON.stringify(res.data.userId));
         window.localStorage.setItem('isAdmin', JSON.stringify(res.data.isAdmin));
-        // dispatch({ type: SET_AUTHENTICATED });
         dispatch({
           type: SET_USER,
           payload: res.data
@@ -65,7 +61,6 @@ export const logoutUser = (history) => () => {
         history.push('/login');
       }
       if (res.data.loggedOut) {
-      // dispatch({ type: SET_UNAUTHENTICATED });
         window.localStorage.removeItem('currentUserId');
         window.localStorage.removeItem('token');
         window.location.reload();
@@ -76,40 +71,6 @@ export const logoutUser = (history) => () => {
     });
 };
 
-export const getUserData = (userId) => (dispatch) => {
-  dispatch({ type: LOADING_USER });
-  if (userId) {
-    axios
-      .get(`${baseURL}users/${userId.replace(/['"]+/g, '')}`)
-      .then((res) => {
-        dispatch({
-          type: SET_USER,
-          payload: res.data
-        });
-      })
-      .catch((err) => console.log(err));
-  }
-  else {
-    dispatch({
-      type: SET_USER,
-      payload: ''
-    });
-  }
-};
-
-// Get all users
-export const getAllUsers = () => (dispatch) => {
-  dispatch({ type: LOADING_USER });
-  axios
-      .get(`${baseURL}users/`)
-      .then((res) => {
-        dispatch({
-          type: SET_USERS,
-          payload: res.data
-        });
-      })
-      .catch((err) => console.log(err));
-};
 
 
 

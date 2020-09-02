@@ -59,7 +59,6 @@ module.exports = {
   isloggedIn: async(req, res, next) => {
     if (req.headers.token) {
       try {
-        // const token = req.headers.token.split(' ')[1];
         const decoded = jwt.verify(req.headers.token, process.env.JWT_SECRET);
 
         const user = await User.findById(decoded.userId);
@@ -78,16 +77,6 @@ module.exports = {
           res.status(400).json('Error: ' + e);
         }
       }
-    }
-    else {
-      next();
-    }
-  },
-
-  isNotloggedIn: (req, res, next) => {
-    if (!req.session.user) {
-      console.log('User not logged in');
-      res.json({ notAuthenticated: true });
     }
     else {
       next();

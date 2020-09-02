@@ -10,27 +10,6 @@ const {
   loginValidation
 } = require('../middlewares/validation');
 
-// Get all users from local storage
-exports.getAllUsers = (req, res) => {
-  try {
-    User.getAll(users => {
-      if (!users || users.length === 0) {
-        res.status(400).json('No any registered users found');
-      }
-      else {
-        const orderedUsers = users.sort((a, b) => {
-          if (a.createdAt > b.createdAt) return -1;
-        });
-        res.json(orderedUsers);
-      }
-    });
-  }
-  catch (err) {
-    console.log('Error : ' + err);
-    res.status(400).json('Error: ' + err);
-  }
-};
-
 // Register new user
 exports.registerNewUser = (req, res) => {
   const { email, password, userName } = req.body;
@@ -181,28 +160,6 @@ exports.userlogOut = (req, res) => {
         }
       }
       else res.status(400).json('User not found');
-    });
-  }
-  catch (err) {
-    console.log(err);
-    res.status(400).json('Error: ' + err);
-  }
-};
-
-// Get one user by ID
-exports.getOneUser = (req, res) => {
-  try {
-    User.getAll(users => {
-      if (users && users.length !== 0) {
-        const user = users.find(u => u._id === +req.params.id);
-        if (!user) {
-          res.status(400).json('Error: user not found');
-        }
-        else {
-          res.json(user);
-        }
-      }
-      else res.status(400).json('No users found');
     });
   }
   catch (err) {

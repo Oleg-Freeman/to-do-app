@@ -26,7 +26,6 @@ const {
   deleteOnetask,
   updateTask,
   markAsCompleted,
-  adminDeleteAnytask,
   adminGetAllTasks
 } = require(pathName);
 
@@ -45,9 +44,6 @@ router.route('/add').post(ensureAuthenticated, addNewTask);
 
 // Delete one Task
 router.route('/:id').delete(ensureAuthenticated, deleteOnetask);
-
-// Admin -  Delete any Task
-router.route('/admin/:id').delete(ensureAuthenticated, isAdmin, adminDeleteAnytask);
 
 // Update Task
 router.route('/update/:id').post(ensureAuthenticated, updateTask);

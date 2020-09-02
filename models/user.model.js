@@ -18,10 +18,6 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  tasks: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Tasks'
-  }],
   isAdmin: {
     type: Boolean,
     required: true,

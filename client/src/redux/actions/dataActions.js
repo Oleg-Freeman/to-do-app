@@ -7,7 +7,6 @@ import {
   EDIT_TASK,
   CLEAR_ERRORS,
   LOADING_UI,
-  SET_TASK,
   STOP_LOADING_UI,
   MARK_COMPLETE
 } from '../types';
@@ -70,24 +69,9 @@ export const adminGetTasks = () => (dispatch) => {
   
 };
 
-// Get one task
-export const getTask = (taskId) => (dispatch) => {
-  dispatch({ type: LOADING_UI });
-  axios
-    .get(`${baseURL}tasks/${taskId}`)
-    .then((res) => {
-      dispatch({
-        type: SET_TASK,
-        payload: res.data
-      });
-      dispatch({ type: STOP_LOADING_UI });
-    })
-    .catch((err) => console.log(err));
-};
   // Add task
 export const addTask = (newTask) => (dispatch) => {
   dispatch({ type: LOADING_UI });
-  // const token = window.localStorage.getItem('token');
   axios({
     method: 'post',
     url: `${baseURL}tasks/add/`,
@@ -112,7 +96,6 @@ export const addTask = (newTask) => (dispatch) => {
   // Edit task
   export const editTask = (newTask, taskId) => (dispatch) => {
     dispatch({ type: LOADING_UI });
-    // const token = window.localStorage.getItem('token');
     axios({
       method: 'post',
       url: `${baseURL}tasks/update/${taskId}`,
@@ -136,7 +119,6 @@ export const addTask = (newTask) => (dispatch) => {
 
 // Delete task
 export const deleteTask = (taskId) => (dispatch) => {
-  // const token = window.localStorage.getItem('token');
   axios({
     method: 'delete',
     url: `${baseURL}tasks/${taskId}`,
@@ -148,7 +130,7 @@ export const deleteTask = (taskId) => (dispatch) => {
     .catch((err) => console.log(err));
 };
 
-// Mark Task as complete
+// Mark Task as complete 
 export const markComplete = (taskId) => (dispatch) => {
   dispatch({ type: LOADING_UI });
   axios({
@@ -164,23 +146,6 @@ export const markComplete = (taskId) => (dispatch) => {
       dispatch({ type: STOP_LOADING_UI });
     })
     .catch((err) => console.log(err));
-};
-
-export const getUserData = (userId) => (dispatch) => {
-  dispatch({ type: LOADING_DATA });
-  axios
-    .get(`${baseURL}users/${userId.replace(/['"]+/g, '')}`)
-    .then((res) => {
-      dispatch({
-        type: SET_TASKS,
-        payload: res.data.tasks
-      });
-    })
-    .catch(() => {
-      dispatch({
-        type: SET_TASKS
-      });
-    });
 };
 
 export const clearErrors = () => (dispatch) => {

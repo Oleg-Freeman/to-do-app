@@ -1,19 +1,19 @@
 Create NodeJS application suite to manage ToDoList
 
 details:
-- should be made 2 apps: cli-client / server
-- show to user only its own items (authorization), except admin,which can manage all items
-- types of user: admin / user
-- store server items in-memory
+- should be made 2 apps: cli-client / server // Done
+- show to user only its own items (authorization), except admin,which can manage all items // Done
+- types of user: admin / user // Done
+- store server items in-memory // Done optional
 - authorization by username/password // DONE
 
 client:
->used to connect to server and manage list-items (CRUD)
+>used to connect to server and manage list-items (CRUD) // Done
 
 server:
->will be executed as system daemon, will reply on clients requests
+>will be executed as system daemon, will reply on clients requests // Done
 
 will be plus:
-- config should have option to switch between InMemoryStorage or PersistentStorage to store items
+- config should have option to switch between InMemoryStorage or PersistentStorage to store items // Done
 - add temporary items and erase them when ttl expired
 - add client with own repl

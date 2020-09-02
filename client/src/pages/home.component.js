@@ -47,6 +47,7 @@ class Home extends Component {
     const recentTasksMarkup = !loading ? (
       tasks.map(task => <Task key={task._id} task={task} action={this.buttonHandler}/>)
     ) : <p>Loading...</p>;
+    console.log(tasks);
     const tasksExist = tasks.length ? recentTasksMarkup : (<DefaultTask/>);
     const getStarted = isAuthenticated ? tasksExist : (<Start/>)
     

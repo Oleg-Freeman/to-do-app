@@ -67,7 +67,7 @@ class Task extends Component {
       }
     } = this.props;
 
-    const _id = this.props.task._id.toString();
+    const _id = this.props.task._id ? this.props.task._id.toString() : undefined;
     const isAuthenticated = window.localStorage.getItem('token');
     const currentUserId = window.localStorage.getItem('currentUserId');
 

@@ -21,7 +21,7 @@ exports.getAllUserTasks = (req, res) => {
         const userTasks = [...tasks1, ...tasks2];
         res.status(200).json(userTasks);
       }
-      else res.status(200).json('No tasks found');
+      else res.status(400).json('No tasks found');
     });
   }
   catch (err) {
@@ -48,7 +48,7 @@ exports.adminGetAllTasks = (req, res) => {
         const userTasks = [...tasks1, ...tasks2];
         res.status(200).json(userTasks);
       }
-      else res.status(200).json('No tasks found');
+      else res.status(400).json('No tasks found');
     });
   }
   catch (err) {
@@ -93,7 +93,7 @@ exports.deleteOnetask = (req, res) => {
     Task.getAll(tasks => {
       if (tasks && tasks.length !== 0) {
         const task = tasks.find(t => t._id === +req.params.id);
-        if (task.userId === req.user._id.toString() || req.user.isAdmin) {
+        if (task.userId === req.user._id || req.user.isAdmin) {
           Task.delete(req.params.id);
           res.json('Task deleted');
         }
@@ -131,7 +131,7 @@ exports.updateTask = (req, res) => {
         if (!task) {
           res.status(400).json('Task not found');
         }
-        else if (task.userId === req.user._id.toString() || req.user.isAdmin) {
+        else if (task.userId === req.user._id || req.user.isAdmin) {
           const { error } = bodyValidation(req.body);
           if (error) {
             res.status(400).json(error.details[0].message);
@@ -163,7 +163,7 @@ exports.markAsCompleted = (req, res) => {
         if (!task) {
           res.status(400).json('Task not found');
         }
-        else if (task.userId === req.user._id.toString() || req.user.isAdmin) {
+        else if (task.userId === req.user._id || req.user.isAdmin) {
           if (task.completed === false) {
             task.completed = true;
             Task.update(task);

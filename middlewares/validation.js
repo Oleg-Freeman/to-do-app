@@ -85,7 +85,6 @@ module.exports = {
   },
 
   isNotloggedIn: (req, res, next) => {
-    console.log(req.session.user);
     if (!req.session.user) {
       console.log('User not logged in');
       res.json({ notAuthenticated: true });
@@ -100,6 +99,21 @@ module.exports = {
       body: Joi.string().empty().not(' ')
     });
     return schema.validate(data);
+  },
+
+  isAdmin: (req, res, next) => {
+    try {
+      if (req.user.isAdmin === true) {
+        next();
+      }
+      else res.status(401).json('Access denied, admin only');
+    }
+    catch (e) {
+      if (e) {
+        console.log('Error: ' + e);
+        res.status(400).json('Error: ' + e);
+      }
+    }
   }
 
 };

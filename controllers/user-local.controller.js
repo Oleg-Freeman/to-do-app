@@ -78,7 +78,8 @@ exports.registerNewUser = (req, res) => {
         }
       }
 
-      const newUser = new User(email, password, userName);
+      const isAdmin = !!req.body.isAdmin;
+      const newUser = new User(email, password, userName, isAdmin);
 
       // Hash password
       const salt = await bcrypt.genSalt(10);
@@ -141,7 +142,8 @@ exports.userLogIn = (req, res) => {
               User.update(user);
               res.json({
                 userId: user._id,
-                token: token
+                token: token,
+                isAdmin: user.isAdmin
               });
             }
             else {

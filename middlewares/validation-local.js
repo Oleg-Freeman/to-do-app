@@ -23,7 +23,6 @@ exports.ensureAuthenticated = (req, res, next) => {
               res.status(401).json('Please log in to view that resource');
             }
             else {
-              // console.log(user);
               req.user = user;
               next();
             }

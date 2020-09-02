@@ -71,7 +71,8 @@ exports.registerNewUser = async(req, res) => {
       return;
     }
 
-    const newUser = new User({ email, password, userName });
+    const isAdmin = !!req.body.isAdmin;
+    const newUser = new User({ email, password, userName, isAdmin });
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
@@ -106,13 +107,6 @@ exports.userLogIn = async(req, res) => {
       res.status(400).json('Wrong credentials, try again');
       return;
     }
-    else if (user.isAuthenticated === true) {
-      res.json({
-        userId: user._id,
-        token: req.header.token
-      });
-      return;
-    }
     else {
       // Match password
       await bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
@@ -132,7 +126,8 @@ exports.userLogIn = async(req, res) => {
           user.save(() => {
             res.json({
               userId: user._id,
-              token: token
+              token: token,
+              isAdmin: user.isAdmin
             });
           });
         }

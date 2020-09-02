@@ -15,11 +15,12 @@ const getUsersFromFile = (cb) => {
 };
 
 class UserLocal {
-  constructor(email = '', password = '', userName = '') {
+  constructor(email = '', password = '', userName = '', isAdmin = false) {
     this.email = email;
     this.password = password;
     this.userName = userName;
     this.isAuthenticated = false;
+    this.isAdmin = isAdmin;
     this.createdAt = new Date();
     this._id = Date.now();
   }

@@ -22,11 +22,11 @@ const userSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Tasks'
   }],
-  // taskCount: {
-  //   type: Number,
-  //   required: true,
-  //   default: 0
-  // },
+  isAdmin: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   isAuthenticated: {
     type: Boolean,
     required: true,

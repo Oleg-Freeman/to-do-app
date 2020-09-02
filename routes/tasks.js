@@ -26,14 +26,19 @@ const {
   deleteOnetask,
   updateTask,
   markAsCompleted,
-  adminDeleteAnytask
+  adminDeleteAnytask,
+  adminGetAllTasks
 } = require(pathName);
 
 // Validations
 const { ensureAuthenticated } = require(validationPathName);
+const { isAdmin } = require('../middlewares/validation.js');
 
 // Get all Tasks from user
 router.route('/').get(ensureAuthenticated, getAllUserTasks);
+
+// Admin - Get all Tasks from storage
+router.route('/admin').get(ensureAuthenticated, isAdmin, adminGetAllTasks);
 
 // Add new Task
 router.route('/add').post(ensureAuthenticated, addNewTask);
@@ -42,7 +47,7 @@ router.route('/add').post(ensureAuthenticated, addNewTask);
 router.route('/:id').delete(ensureAuthenticated, deleteOnetask);
 
 // Admin -  Delete any Task
-router.route('/admin/:id').delete(ensureAuthenticated, adminDeleteAnytask);
+router.route('/admin/:id').delete(ensureAuthenticated, isAdmin, adminDeleteAnytask);
 
 // Update Task
 router.route('/update/:id').post(ensureAuthenticated, updateTask);
